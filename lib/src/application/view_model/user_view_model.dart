@@ -133,8 +133,8 @@ class UserViewModel extends ChangeNotifier {
       Map<String, String> token = await locator.get<GetSecureValue>().readAll();
 
       if (token.isNotEmpty) {
-        _curentUser =
-            User(data: Data(token: token.toString()), hasError: false);
+        _curentUser = User(
+            data: Data(token: token.values.first.toString()), hasError: false);
         return token.values.first;
       }
     } catch (e) {

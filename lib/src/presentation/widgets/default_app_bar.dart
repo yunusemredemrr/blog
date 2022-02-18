@@ -48,7 +48,10 @@ class DefaultAppBar extends StatelessWidget {
                 (_) => EdgeInsets.zero,
               ),
             ),
-            child: leadingIcon ?? const SizedBox.shrink(),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 60.0, bottom: 12),
+              child: leadingIcon ?? const SizedBox.shrink(),
+            ),
             onPressed: () {
               leadingOnPressed();
             },

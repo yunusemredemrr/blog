@@ -20,7 +20,7 @@ class DataBaseRepository implements BaseRepository {
     try {
       switch (requestType) {
         case "GET":
-          response = await http.get(url);
+          response = await http.get(url, headers: header);
           break;
         case "POST":
           response = await http.post(

@@ -13,7 +13,7 @@ class LandingPage extends StatelessWidget {
     final _currentUser = Provider.of<UserViewModel>(context).curentUser;
 
     if (_currentUser != null) {
-      return HomePage();
+      return HomePage(_currentUser);
     } else {
       return LoginRegisterPage();
     }

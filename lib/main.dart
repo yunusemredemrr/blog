@@ -3,7 +3,6 @@
 import 'package:blog/locator.dart';
 import 'package:blog/src/application/view_model/user_view_model.dart';
 import 'package:blog/src/presentation/pages/landing_page.dart';
-import 'package:blog/src/presentation/pages/login_register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

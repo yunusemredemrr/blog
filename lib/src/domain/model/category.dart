@@ -1,3 +1,5 @@
+import 'package:blog/src/domain/model/validation_error.dart';
+
 class Category {
   List<ValidationErrors>? validationErrors;
   bool? hasError;
@@ -34,25 +36,6 @@ class Category {
     if (this.data != null) {
       data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
-    return data;
-  }
-}
-
-class ValidationErrors {
-  String? key;
-  String? value;
-
-  ValidationErrors({this.key, this.value});
-
-  ValidationErrors.fromJson(Map<String, dynamic> json) {
-    key = json['key'];
-    value = json['value'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['key'] = key;
-    data['value'] = value;
     return data;
   }
 }

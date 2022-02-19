@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 class CategoryContainer extends StatelessWidget {
   final String categoryTitle, categoryImage;
   final Function onTap;
+  final double? height, width;
 
   const CategoryContainer({
     Key? key,
     required this.categoryTitle,
     required this.categoryImage,
     required this.onTap,
+    this.height,
+    this.width,
   }) : super(key: key);
 
   @override
@@ -20,8 +23,8 @@ class CategoryContainer extends StatelessWidget {
       child: Column(
         children: [
           Container(
-              height: 93,
-              width: 166,
+              height: height,
+              width: width,
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -34,7 +37,10 @@ class CategoryContainer extends StatelessWidget {
                 ),
               )),
           const SizedBox(height: 5),
-          Text(categoryTitle),
+          SizedBox(
+            width: width,
+            child: Text(categoryTitle),
+          ),
         ],
       ),
     );

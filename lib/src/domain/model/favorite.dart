@@ -1,14 +1,14 @@
 import 'package:blog/src/domain/model/validation_error.dart';
 
-class User {
+class Favorite {
   List<ValidationErrors>? validationErrors;
   bool? hasError;
   String? message;
-  Data? data;
+  bool? data;
 
-  User({this.validationErrors, this.hasError, this.message, this.data});
+  Favorite({this.validationErrors, this.hasError, this.message, this.data});
 
-  User.fromJson(Map<String, dynamic> json) {
+  Favorite.fromJson(Map<String, dynamic> json) {
     if (json['ValidationErrors'] != null) {
       validationErrors = <ValidationErrors>[];
       json['ValidationErrors'].forEach((v) {
@@ -17,7 +17,7 @@ class User {
     }
     hasError = json['HasError'];
     message = json['Message'];
-    data = json['Data'] != null ? Data.fromJson(json['Data']) : null;
+    data = json['Data'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,25 +28,7 @@ class User {
     }
     data['HasError'] = hasError;
     data['Message'] = message;
-    if (this.data != null) {
-      data['Data'] = this.data!.toJson();
-    }
-    return data;
-  }
-}
-
-class Data {
-  String? token;
-
-  Data({this.token});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    token = json['Token'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['Token'] = token;
+    data['Data'] = this.data;
     return data;
   }
 }

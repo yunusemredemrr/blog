@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, no_logic_in_create_state
 
+import 'package:blog/src/application/view_model/account_view_model.dart';
 import 'package:blog/src/application/view_model/blog_view_model.dart';
 import 'package:blog/src/domain/model/user.dart';
 import 'package:blog/src/domain/types/enums/tab_item.dart';
@@ -52,8 +53,15 @@ class _HomePageState extends State<HomePage> {
     if (item == TabItem.Favorite) {
       return FavoritePage();
     } else if (item == TabItem.Blog) {
-      return ChangeNotifierProvider(
-        create: (_) => BlogViewModel(_user.data!.token),
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => BlogViewModel(_user.data!.token.toString()),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => AccountViewModel(_user.data!.token.toString()),
+          ),
+        ],
         child: BlogPage(_user),
       );
     } else {

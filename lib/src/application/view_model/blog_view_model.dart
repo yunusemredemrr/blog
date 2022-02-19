@@ -5,7 +5,7 @@ import 'package:blog/src/application/view_model/account_view_model.dart';
 import 'package:blog/src/constants/constants.dart';
 import 'package:blog/src/domain/model/blog.dart';
 import 'package:blog/src/domain/model/category.dart';
-import 'package:blog/src/domain/model/favorite.dart';
+import 'package:blog/src/domain/model/update.dart';
 import 'package:blog/src/domain/types/enums/banner_type.dart';
 import 'package:blog/src/domain/types/enums/blog_view_state.dart';
 import 'package:blog/src/domain/usecases/get_blogs.dart';
@@ -84,7 +84,7 @@ class BlogViewModel extends ChangeNotifier {
   void toggleFavorite(id, BuildContext context) async {
     try {
       blogViewState = BlogViewState.Bussy;
-      Favorite _currentFavorite =
+      Update _currentFavorite =
           await locator.get<ToggleFavorite>().toggleFavorite(token, id);
       if (!_currentFavorite.hasError!) {
         kShowBanner(BannerType.SUCCESS, _currentFavorite.message!, context);

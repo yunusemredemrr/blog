@@ -1,14 +1,14 @@
 import 'package:blog/src/domain/model/validation_error.dart';
 
-class Favorite {
+class Update {
   List<ValidationErrors>? validationErrors;
   bool? hasError;
   String? message;
   bool? data;
 
-  Favorite({this.validationErrors, this.hasError, this.message, this.data});
+  Update({this.validationErrors, this.hasError, this.message, this.data});
 
-  Favorite.fromJson(Map<String, dynamic> json) {
+  Update.fromJson(Map<String, dynamic> json) {
     if (json['ValidationErrors'] != null) {
       validationErrors = <ValidationErrors>[];
       json['ValidationErrors'].forEach((v) {

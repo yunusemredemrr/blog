@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:blog/src/domain/model/blog.dart';
 import 'package:blog/src/domain/model/category.dart';
-import 'package:blog/src/domain/model/favorite.dart';
+import 'package:blog/src/domain/model/update.dart';
 import 'package:blog/src/domain/repository/base_repository.dart';
 import 'package:blog/src/domain/repository/blog_repository.dart';
 import 'package:blog/src/infrastructure/repository/data_base_repository.dart';
@@ -48,7 +48,7 @@ class DataBlogRepository implements BlogRepository {
   }
 
   @override
-  Future<Favorite> toggleFavorite(String token, String id) async {
+  Future<Update> toggleFavorite(String token, String id) async {
     Map<String, String> header = {
       "Access-Control_Allow_Origin": "*",
       "Content-Type": "application/json",
@@ -60,6 +60,6 @@ class DataBlogRepository implements BlogRepository {
 
     Response response = await _baseRepository
         .executeRequest("POST", "Blog/ToggleFavorite", header, body: body);
-    return Favorite.fromJson(json.decode(response.body));
+    return Update.fromJson(json.decode(response.body));
   }
 }

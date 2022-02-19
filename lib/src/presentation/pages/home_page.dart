@@ -75,7 +75,17 @@ class _HomePageState extends State<HomePage> {
         child: BlogPage(_user),
       );
     } else {
-      return ProfilePage();
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => BlogViewModel(_user.data!.token.toString()),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => AccountViewModel(_user.data!.token.toString()),
+          ),
+        ],
+        child: ProfilePage(_user),
+      );
     }
   }
 }

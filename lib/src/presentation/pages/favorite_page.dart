@@ -3,8 +3,10 @@
 import 'package:blog/src/application/view_model/account_view_model.dart';
 import 'package:blog/src/application/view_model/blog_view_model.dart';
 import 'package:blog/src/constants/constants.dart';
+import 'package:blog/src/presentation/pages/blog_detail_page.dart';
 import 'package:blog/src/presentation/widgets/category_container.dart';
 import 'package:blog/src/presentation/widgets/default_app_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -65,7 +67,15 @@ class FavoritePage extends StatelessWidget {
                               categoryImage: _blogViewModel
                                   .allBlogs!.data![key].image
                                   .toString(),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => BlogDetailPage(
+                                        _blogViewModel.allBlogs!.data![key]),
+                                  ),
+                                );
+                              },
                             ),
                             Positioned(
                               right: 10,

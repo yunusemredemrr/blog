@@ -9,7 +9,7 @@ class DefaultButton extends StatelessWidget {
   final Color? butonColor;
   final Color? textColor;
   final Color? iconColor;
-  final IconData? icon;
+  final Widget? icon;
 
   const DefaultButton({
     Key? key,
@@ -49,10 +49,7 @@ class DefaultButton extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(
-                      icon,
-                      color: iconColor,
-                    ),
+                    icon ?? const SizedBox.shrink(),
                   ],
                 ),
               ),

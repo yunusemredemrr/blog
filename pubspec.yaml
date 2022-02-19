@@ -16,6 +16,11 @@ dependencies:
   get_it: ^7.2.0
   another_flushbar: ^1.10.24
   flutter_secure_storage: ^5.0.2
+  flutter_html: ^2.2.1
+  google_maps_flutter: ^2.1.1
+  geolocator: ^8.2.0
+  permission_handler: ^8.3.0
+  image_picker: ^0.8.4+9
 
 
 dev_dependencies:
@@ -30,7 +35,9 @@ flutter:
 
   assets:
     - assets/images/logo.png
+    - assets/images/no_profile.png
     - assets/icons/pan.png
+    - assets/icons/gallery.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

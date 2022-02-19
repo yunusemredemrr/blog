@@ -3,8 +3,8 @@
 import 'package:blog/src/application/view_model/account_view_model.dart';
 import 'package:blog/src/application/view_model/blog_view_model.dart';
 import 'package:blog/src/constants/constants.dart';
-import 'package:blog/src/domain/model/account.dart';
 import 'package:blog/src/domain/model/user.dart';
+import 'package:blog/src/presentation/pages/blog_detail_page.dart';
 import 'package:blog/src/presentation/widgets/category_container.dart';
 import 'package:blog/src/presentation/widgets/default_app_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +28,21 @@ class _BlogPageState extends State<BlogPage> {
   Widget build(BuildContext context) {
     BlogViewModel _blogViewModel = Provider.of<BlogViewModel>(context);
     AccountViewModel _accountViewModel = Provider.of<AccountViewModel>(context);
+
+    Color favoriteIconColor(id) {
+      if (_accountViewModel.account != null) {
+        for (var key = 0;
+            key < _accountViewModel.account!.data!.favoriteBlogIds!.length;
+            key++) {
+          if (_accountViewModel.account!.data!.favoriteBlogIds![key] == id) {
+            return kErrorTextColor;
+          }
+        }
+        return kWhite;
+      } else {
+        return kWhite;
+      }
+    }
 
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -111,7 +126,17 @@ class _BlogPageState extends State<BlogPage> {
                             categoryImage: _blogViewModel
                                 .blogs!.data![key].image
                                 .toString(),
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  fullscreenDialog: true,
+                                  builder: (context) => BlogDetailPage(
+                                    _blogViewModel.blogs!.data![key],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                           Positioned(
                             right: 10,
@@ -142,19 +167,5 @@ class _BlogPageState extends State<BlogPage> {
         ],
       ),
     );
-  }
-
-  Color favoriteIconColor(id) {
-    Account? _account = Provider.of<AccountViewModel>(context).account;
-    if (_account != null) {
-      for (var key = 0; key < _account.data!.favoriteBlogIds!.length; key++) {
-        if (_account.data!.favoriteBlogIds![key] == id) {
-          return kErrorTextColor;
-        }
-      }
-      return kWhite;
-    } else {
-      return kWhite;
-    }
   }
 }

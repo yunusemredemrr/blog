@@ -4,7 +4,7 @@ class Blog {
   List<ValidationErrors>? validationErrors;
   bool? hasError;
   String? message;
-  List<Data>? data;
+  List<BlogData>? data;
 
   Blog({this.validationErrors, this.hasError, this.message, this.data});
 
@@ -18,9 +18,9 @@ class Blog {
     hasError = json['HasError'];
     message = json['Message'];
     if (json['Data'] != null) {
-      data = <Data>[];
+      data = <BlogData>[];
       json['Data'].forEach((v) {
-        data!.add(Data.fromJson(v));
+        data!.add(BlogData.fromJson(v));
       });
     }
   }
@@ -40,16 +40,16 @@ class Blog {
   }
 }
 
-class Data {
+class BlogData {
   String? title;
   String? content;
   String? image;
   String? categoryId;
   String? id;
 
-  Data({this.title, this.content, this.image, this.categoryId, this.id});
+  BlogData({this.title, this.content, this.image, this.categoryId, this.id});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  BlogData.fromJson(Map<String, dynamic> json) {
     title = json['Title'];
     content = json['Content'];
     image = json['Image'];

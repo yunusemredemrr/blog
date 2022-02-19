@@ -8,6 +8,7 @@ import 'package:blog/src/domain/model/user.dart';
 import 'package:blog/src/domain/types/enums/banner_type.dart';
 import 'package:blog/src/domain/types/enums/login_state.dart';
 import 'package:blog/src/domain/types/enums/view_state.dart';
+import 'package:blog/src/domain/usecases/delete_all_secure_values.dart';
 import 'package:blog/src/domain/usecases/get_secure_value.dart';
 import 'package:blog/src/domain/usecases/login_user.dart';
 import 'package:blog/src/domain/usecases/set_secure_value.dart';
@@ -74,6 +75,9 @@ class UserViewModel extends ChangeNotifier {
           await locator
               .get<SetSecureValue>()
               .write(_curentUser!.data!.token.toString());
+          _emailController.text = "";
+          _passwordController.text = "";
+          _rePasswordController.text = "";
         }
       }
     } catch (e, st) {
@@ -110,13 +114,17 @@ class UserViewModel extends ChangeNotifier {
           await locator
               .get<SetSecureValue>()
               .write(_curentUser!.data!.token.toString());
+          _emailController.text = "";
+          _passwordController.text = "";
+          _rePasswordController.text = "";
         }
       } else if ((_emailController.text.trim().isNotEmpty &&
               _passwordController.text.trim().isNotEmpty &&
               _rePasswordController.text.trim().isNotEmpty) &&
           _passwordController.text.trim() !=
               _rePasswordController.text.trim()) {
-        kShowBanner(BannerType.ERROR, "Girilen Şifreler Uyuşmuyor", context);
+        kShowBanner(
+            BannerType.ERROR, "Entered Passwords Do Not Match", context);
       }
     } catch (e, st) {
       print(e);
@@ -139,6 +147,20 @@ class UserViewModel extends ChangeNotifier {
       }
     } catch (e) {
       print(e);
+    } finally {
+      viewState = ViewState.Idle;
+    }
+  }
+
+  logOut(BuildContext context) async {
+    try {
+      viewState = ViewState.Busy;
+      await locator.get<DeleteAllSecureValues>().deleteAll();
+      _curentUser = null;
+      kShowBanner(BannerType.SUCCESS, "Log Out Successful", context);
+    } catch (e) {
+      kShowBanner(BannerType.ERROR,
+          "Sorry, Error Encountered While Logging Out", context);
     } finally {
       viewState = ViewState.Idle;
     }

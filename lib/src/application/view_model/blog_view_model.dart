@@ -18,6 +18,7 @@ class BlogViewModel extends ChangeNotifier {
   BlogViewState _blogViewState = BlogViewState.Idle;
   Category? categories;
   Blog? blogs;
+  Blog? allBlogs;
   String token;
 
   BlogViewState get blogViewState => _blogViewState;
@@ -31,6 +32,7 @@ class BlogViewModel extends ChangeNotifier {
     blogViewState = BlogViewState.Idle;
     getCategories();
     getBlogs();
+    getAllBlogs();
   }
 
   getCategories() async {
@@ -56,6 +58,21 @@ class BlogViewModel extends ChangeNotifier {
       if (!_currentBlogs.hasError!) {
         print(_currentBlogs.data!.length);
         blogs = _currentBlogs;
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      blogViewState = BlogViewState.Loaded;
+    }
+  }
+
+  void getAllBlogs() async {
+    try {
+      blogViewState = BlogViewState.Bussy;
+      Blog _currentBlogs = await locator.get<GetBlogs>().getBlogs(token);
+      if (!_currentBlogs.hasError!) {
+        print(_currentBlogs.data!.length);
+        allBlogs = _currentBlogs;
       }
     } catch (e) {
       print(e);

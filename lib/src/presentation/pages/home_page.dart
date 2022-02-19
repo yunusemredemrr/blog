@@ -51,7 +51,17 @@ class _HomePageState extends State<HomePage> {
 
   _pagess(TabItem item) {
     if (item == TabItem.Favorite) {
-      return FavoritePage();
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => BlogViewModel(_user.data!.token.toString()),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => AccountViewModel(_user.data!.token.toString()),
+          ),
+        ],
+        child: FavoritePage(),
+      );
     } else if (item == TabItem.Blog) {
       return MultiProvider(
         providers: [

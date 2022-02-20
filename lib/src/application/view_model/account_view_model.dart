@@ -2,11 +2,9 @@
 
 import 'dart:convert';
 
-import 'package:blog/src/constants/constants.dart';
 import 'package:blog/src/domain/model/account.dart';
 import 'package:blog/src/domain/model/image_model.dart';
 import 'package:blog/src/domain/types/enums/account_view_state.dart';
-import 'package:blog/src/domain/types/enums/banner_type.dart';
 import 'package:blog/src/domain/usecases/get_account.dart';
 import 'package:blog/src/domain/usecases/get_location.dart';
 import 'package:blog/src/domain/usecases/update_account.dart';
@@ -16,12 +14,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../locator.dart';
+import '../../domain/model/update.dart';
 
 class AccountViewModel extends ChangeNotifier {
   AccountViewState _accountViewState = AccountViewState.Idle;
   String token;
   Position? _currentPosition;
   double? longitude, latitude;
+  String? imageUrl;
 
   Account? account;
 
@@ -36,6 +36,12 @@ class AccountViewModel extends ChangeNotifier {
   AccountViewModel(this.token) {
     _accountViewState = AccountViewState.Idle;
     getAccount();
+  }
+
+  setLatLng(double lat, double lng) {
+    longitude = lng;
+    latitude = lat;
+    notifyListeners();
   }
 
   getAccount() async {
@@ -59,12 +65,15 @@ class AccountViewModel extends ChangeNotifier {
       accountViewState = AccountViewState.Bussy;
       ImageModel _currentImage =
           await locator.get<UploadImage>().uploadImage(token, imagePath);
+      if (!_currentImage.hasError!) {
+        imageUrl = _currentImage.data;
+        print(_currentImage.data);
+      }
       return _currentImage.message!;
     } catch (e) {
       print(e);
       rethrow;
     } finally {
-      getAccount();
       accountViewState = AccountViewState.Loaded;
     }
   }
@@ -83,14 +92,15 @@ class AccountViewModel extends ChangeNotifier {
                 await locator.get<GetLocation>().getCurrentLocation();
             longitude = _currentPosition!.longitude;
             latitude = _currentPosition!.latitude;
-            locator.get<UpdateAccount>().updateAccount(
-                token,
-                jsonEncode({
-                  "Location": {
-                    "Longtitude": "$longitude",
-                    "Latitude": "$latitude",
-                  }
-                }));
+            String body = jsonEncode(
+              {
+                "Location": {
+                  "Longtitude": "$longitude",
+                  "Latitude": "$latitude",
+                }
+              },
+            );
+            updateAccount(body);
           } else {
             longitude = 29.0280933;
             latitude = 41.049495;
@@ -111,6 +121,22 @@ class AccountViewModel extends ChangeNotifier {
     } catch (e) {
       print(e);
     } finally {
+      accountViewState = AccountViewState.Loaded;
+    }
+  }
+
+  updateAccount(body) async {
+    try {
+      accountViewState = AccountViewState.Bussy;
+      Update _curentUpdate = await locator.get<UpdateAccount>().updateAccount(
+            token,
+            body,
+          );
+      print(_curentUpdate.message);
+    } catch (e) {
+      print(e);
+    } finally {
+      getAccount();
       accountViewState = AccountViewState.Loaded;
     }
   }

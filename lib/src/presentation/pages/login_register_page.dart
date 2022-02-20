@@ -201,8 +201,10 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                                       height: 56,
                                       width: 358,
                                       textColor: kWhite,
-                                      icon: Icon(Icons.login),
-                                      iconColor: Colors.white,
+                                      icon: Icon(
+                                        Icons.login,
+                                        color: kWhite,
+                                      ),
                                     ),
                                     const SizedBox(height: 16),
                                     DefaultButton(

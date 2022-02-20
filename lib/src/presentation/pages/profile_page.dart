@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, curly_braces_in_flow_control_structures, no_logic_in_create_state
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, curly_braces_in_flow_control_structures, no_logic_in_create_state, unrelated_type_equality_checks, avoid_print
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:blog/src/application/view_model/account_view_model.dart';
@@ -29,20 +30,39 @@ class _ProfilePageState extends State<ProfilePage> {
   final User _user;
   _ProfilePageState(this._user);
 
-  Completer<GoogleMapController> _controller = Completer();
+  late GoogleMapController _controller;
   final ImagePicker _picker = ImagePicker();
   XFile? _profilPhoto;
 
   @override
   Widget build(BuildContext context) {
     AccountViewModel _accountViewModel = Provider.of<AccountViewModel>(context);
-    double _latitude = _accountViewModel.latitude!;
-    double _longitude = _accountViewModel.longitude!;
-
+    Future.delayed(Duration(milliseconds: 500));
     final CameraPosition _kGooglePlex = CameraPosition(
-      target: LatLng(_latitude, _longitude),
-      zoom: 14.4746,
+      target: LatLng(_accountViewModel.latitude!, _accountViewModel.longitude!),
+      zoom: 8,
     );
+
+    LatLng _lastMapPosition = _kGooglePlex.target;
+    final Set<Marker> _createMarker = {
+      // ignore: prefer_collection_literals
+      Marker(
+        markerId: MarkerId("MyLocation"),
+        position: _lastMapPosition,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        infoWindow: InfoWindow(title: "Your Location"),
+      ),
+    };
+
+    void _cameraMove(CameraPosition position) {
+      _lastMapPosition = position.target;
+    }
+
+    void _onTap(LatLng argument) {
+      Provider.of<AccountViewModel>(context, listen: false)
+          .setLatLng(argument.latitude, argument.longitude);
+    }
+
     BuildContext thisContext = context;
     return Scaffold(
       body: GestureDetector(
@@ -106,7 +126,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                               .uploadImage(
                                                   _profilPhoto!.path, context);
 
-                                          _profilPhoto = null;
                                           Navigator.pop(context);
                                           kShowBanner(BannerType.SUCCESS,
                                               message, context);
@@ -127,14 +146,24 @@ class _ProfilePageState extends State<ProfilePage> {
                                 width: 176,
                                 height: 178,
                                 child: ClipOval(
-                                  child:
-                                      _accountViewModel.account!.data!.image !=
+                                  child: _profilPhoto != null
+                                      ? Image.file(
+                                          File(_profilPhoto!.path),
+                                          fit: BoxFit.fill,
+                                        )
+                                      : _accountViewModel
+                                                  .account!.data!.image !=
                                               null
-                                          ? Image.network(_accountViewModel
-                                              .account!.data!.image
-                                              .toString())
+                                          ? Image.network(
+                                              _accountViewModel
+                                                  .account!.data!.image
+                                                  .toString(),
+                                              fit: BoxFit.fill,
+                                            )
                                           : Image.asset(
-                                              "assets/images/no_profile.png"),
+                                              "assets/images/no_profile.png",
+                                              fit: BoxFit.fill,
+                                            ),
                                 ),
                               ),
                               Positioned(
@@ -162,15 +191,26 @@ class _ProfilePageState extends State<ProfilePage> {
                         mapType: MapType.normal,
                         initialCameraPosition: _kGooglePlex,
                         onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
+                          _controller = controller;
                         },
+                        markers: _createMarker,
+                        onCameraMove: _cameraMove,
+                        onTap: _onTap,
                       ),
                     ),
                     SizedBox(height: 25),
                     DefaultButton(
                       width: 359,
                       height: 57,
-                      buttonPressed: () {},
+                      buttonPressed: () {
+                        try {
+                          _save(_accountViewModel, context);
+                          kShowBanner(BannerType.SUCCESS,
+                              "Your Information Has Been Updated", context);
+                        } catch (e) {
+                          kShowBanner(BannerType.ERROR, e.toString(), context);
+                        }
+                      },
                       buttonText: "Save",
                       butonColor: kBackGroundColor,
                     ),
@@ -215,6 +255,78 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       _profilPhoto = newPhoto;
       Navigator.of(context).pop();
+    });
+  }
+
+  void _save(AccountViewModel accountViewModel, BuildContext context) {
+    try {
+      if (accountViewModel.account!.data!.image != null) {
+        if (accountViewModel.imageUrl != null) {
+          if (accountViewModel.account!.data!.image !=
+              accountViewModel.imageUrl) {
+            String _body = jsonEncode({
+              "Image": accountViewModel.imageUrl,
+              "Location": {
+                "Longtitude": "29.2049583",
+                "Latitude": "41.200622",
+              }
+            });
+            Provider.of<AccountViewModel>(context, listen: false)
+                .updateAccount(_body);
+            _updateCameraPosition(accountViewModel);
+          } else {
+            String _body = jsonEncode({
+              "Image": accountViewModel.account!.data!.image,
+              "Location": {
+                "Longtitude": "${accountViewModel.longitude}",
+                "Latitude": "${accountViewModel.latitude}"
+              }
+            });
+            Provider.of<AccountViewModel>(context, listen: false)
+                .updateAccount(_body);
+            _updateCameraPosition(accountViewModel);
+          }
+        } else {
+          String _body = jsonEncode({
+            "Image": accountViewModel.account!.data!.image,
+            "Location": {
+              "Longtitude": "${accountViewModel.longitude}",
+              "Latitude": "${accountViewModel.latitude}"
+            }
+          });
+          Provider.of<AccountViewModel>(context, listen: false)
+              .updateAccount(_body);
+          _updateCameraPosition(accountViewModel);
+        }
+      } else {
+        String _body = jsonEncode({
+          "Image": accountViewModel.imageUrl,
+          "Location": {
+            "Longtitude": "${accountViewModel.longitude}",
+            "Latitude": "${accountViewModel.latitude}"
+          }
+        });
+        Provider.of<AccountViewModel>(context, listen: false)
+            .updateAccount(_body);
+        _updateCameraPosition(accountViewModel);
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      _updateCameraPosition(accountViewModel);
+    }
+  }
+
+  _updateCameraPosition(AccountViewModel accountViewModel) {
+    Future.delayed(Duration(seconds: 2), () {
+      _controller.moveCamera(
+        CameraUpdate.newLatLng(
+          LatLng(
+            accountViewModel.latitude!,
+            accountViewModel.longitude!,
+          ),
+        ),
+      );
     });
   }
 }

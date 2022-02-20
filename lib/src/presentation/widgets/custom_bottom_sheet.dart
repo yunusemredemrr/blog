@@ -53,7 +53,7 @@ class CustomButtomSheet extends StatelessWidget {
                     selectButtonPressed();
                   },
                   buttonText: "Select",
-                  width: 174,
+                  width: isMiniMobile(context) ? 145 : 174,
                   height: 56,
                   textColor: kWhite,
                   icon: Icon(
@@ -66,7 +66,7 @@ class CustomButtomSheet extends StatelessWidget {
                     removeButtonPressed();
                   },
                   buttonText: "Remove",
-                  width: 177,
+                  width: isMiniMobile(context) ? 155 : 177,
                   height: 57,
                   butonColor: kBackGroundColor,
                   icon: Icon(

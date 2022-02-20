@@ -2,7 +2,6 @@
 
 import 'package:blog/src/constants/constants.dart';
 import 'package:blog/src/domain/types/enums/tab_item.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CustomNavigationBar extends StatelessWidget {

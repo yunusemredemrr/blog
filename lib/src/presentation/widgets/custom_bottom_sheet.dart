@@ -39,7 +39,7 @@ class CustomButtomSheet extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               width: 362,
               height: 340,
               child: _showPhoto(),
@@ -56,6 +56,10 @@ class CustomButtomSheet extends StatelessWidget {
                   width: 174,
                   height: 56,
                   textColor: kWhite,
+                  icon: Icon(
+                    Icons.logout,
+                    color: kBackGroundColor,
+                  ),
                 ),
                 DefaultButton(
                   buttonPressed: () {
@@ -65,6 +69,9 @@ class CustomButtomSheet extends StatelessWidget {
                   width: 177,
                   height: 57,
                   butonColor: kBackGroundColor,
+                  icon: Icon(
+                    Icons.logout,
+                  ),
                 ),
               ],
             ),

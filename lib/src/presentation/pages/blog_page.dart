@@ -7,9 +7,7 @@ import 'package:blog/src/domain/model/user.dart';
 import 'package:blog/src/presentation/pages/blog_detail_page.dart';
 import 'package:blog/src/presentation/widgets/category_container.dart';
 import 'package:blog/src/presentation/widgets/default_app_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class BlogPage extends StatefulWidget {
@@ -129,8 +127,7 @@ class _BlogPageState extends State<BlogPage> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                CupertinoPageRoute(
-                                  fullscreenDialog: true,
+                                MaterialPageRoute(
                                   builder: (context) => BlogDetailPage(
                                     _blogViewModel.blogs!.data![key],
                                   ),

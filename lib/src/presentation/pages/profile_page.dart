@@ -40,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
     Future.delayed(Duration(milliseconds: 500));
     final CameraPosition _kGooglePlex = CameraPosition(
       target: LatLng(_accountViewModel.latitude!, _accountViewModel.longitude!),
-      zoom: 8,
+      zoom: 14,
     );
 
     LatLng _lastMapPosition = _kGooglePlex.target;
@@ -213,6 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       buttonText: "Save",
                       butonColor: kBackGroundColor,
+                      icon: Icon(Icons.logout),
                     ),
                     SizedBox(height: 3),
                     DefaultButton(
@@ -224,6 +225,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       buttonText: "Log Out",
                       textColor: kWhite,
+                      icon: Icon(
+                        Icons.logout,
+                        color: kBackGroundColor,
+                      ),
                     ),
                   ],
                 ),

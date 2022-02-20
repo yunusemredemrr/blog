@@ -5,7 +5,6 @@ import 'package:blog/src/domain/model/blog.dart';
 import 'package:blog/src/presentation/widgets/default_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/shims/dart_ui_real.dart';
 
 class BlogDetailPage extends StatelessWidget {
   final BlogData _blog;
@@ -59,6 +58,8 @@ class BlogDetailPage extends StatelessWidget {
                   ),
                   SizedBox(height: 15),
                   Html(data: _blog.content),
+                  SizedBox(height: 15),
+                  Image.network(_blog.image!),
                 ],
               ),
             ),

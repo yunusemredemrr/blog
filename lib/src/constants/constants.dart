@@ -3,7 +3,6 @@
 import 'package:blog/src/domain/types/enums/banner_type.dart';
 import 'package:blog/src/presentation/widgets/default_notification_banner.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 const Color kPrimaryColor = Color(0xFF28429A);
 const Color kBlueColor = Color.fromARGB(255, 2, 17, 74);

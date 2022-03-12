@@ -16,7 +16,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
-    a();
+    permission();
     super.initState();
   }
 
@@ -31,7 +31,7 @@ class _LandingPageState extends State<LandingPage> {
     }
   }
 
-  void a() async {
+  void permission() async {
     await Permission.location.request();
   }
 }
